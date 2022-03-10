@@ -3,10 +3,10 @@ import os
 import shutil
 from tqdm import tqdm
 import logging
-from src.utils.common import read_yaml, create_directories
+from src.utils.common import read_yaml, create_directories, unzip_file
+from src.utils.data_mgmt import validate_image
 import random
 import urllib.request as req
-
 
 STAGE = "GET_DATA" ## <<< change stage name 
 
@@ -18,7 +18,7 @@ logging.basicConfig(
     )
 
 
-def main(config_path, params_path):
+def main(config_path):
     ## read config files
     config = read_yaml(config_path)
     URL = config["data"]["source_url"]
@@ -28,7 +28,7 @@ def main(config_path, params_path):
     data_file = config["data"]["data_file"]
     data_file_path = os.path.join(local_dir, data_file)
 
-
+    
     if not os.path.isfile(data_file_path):
         logging.info("downloading started...")
         filename, headers = req.urlretrieve(URL, data_file_path)
